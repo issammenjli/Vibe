@@ -77,6 +77,8 @@ Revenons à nos moutons 😊. La première ligne déclare une page Razor. Le mod
 Maintenant, d'où vient le modèle ? 
 Lorsque je clique sur le petit triangle devant Index.cshtml, Index.cshtml.cs apparaît  et qui emballe la classe IndexModel.
  
+ ![This is an image](https://github.com/issammenjli/Vibe/blob/master/Vibe.UI/wwwroot/images/IndexModel.png)
+ 
 La classe IndexModel découle de la classe de base PageModel. Elle a une propriété Singers référencée dans Index.cshtml. Elle a aussi une méthode OnGet() qui charge un Singers en appelant la méthode GetAll(). Et le GetAll est appelé sur l’objet SingerRepository injecté par le conteneur d'injection.
 La méthode OnGet() est appelée un handler method. Elle sera exécutée lorsque la page recevra une requête get.
 Retour à la page Index, l’autre chose intéressante dans le Razor est la balise spéciale asp‑page, ce n'est pas un attribut HTML standard mais un exemple de helper. Cet attribut est traité par ASP.NET Core lorsqu'il restitue la page. 
@@ -104,6 +106,8 @@ Revenant à la classe Model, elle a également une méthode handler, mais cette 
 Dans celui-ci, nous disons simplement au SingerRepository d'ajouter un nouveau Singer.
 ModelState IsValid vérifiera s'il y a des erreurs de validation.
 Les attributs d'annotation de données seront utilisés pour valider les données entrantes.
+ 
+ ![This is an image](https://github.com/issammenjli/Vibe/blob/master/Vibe.UI/wwwroot/images/Entities.png)
  
 Lorsqu'il y a une erreur de validation, CAD le ModelState est invalide, nous renvoyons un objet qui provient d'un appel à la méthode Page(). Il s'agit d'un objet qui implémente l'interface IActionResult.
 Cet objet s'assurera que la page actuelle, dans ce cas, la page Create, est réaffichée, mais puisqu'il y a maintenant des erreurs de validation, le résumé de validation s'affichera.
@@ -183,7 +187,7 @@ A ce stade j’introduis dans Vibe.UI une classe SingerApiService qui se charger
  
 Ce service obtient le HttpClient injecté. 
 
- ![This is an image](https://github.com/issammenjli/Vibe/blob/master/Vibe.UI/wwwroot/images/GetAllController.PNG)
+ ![This is an image](https://github.com/issammenjli/Vibe/blob/master/Vibe.UI/wwwroot/images/ServiceGetAll.PNG)
  
 Dans GetAll, on l'utilise pour faire une requête GET à l'URL du Singer.
 La ligne suivante garantit un code d'état HTTP dans la plage 200, ce qui indique le succès. Si un autre code d'état est renvoyé, une exception est levée ici. Après ça, les données contenues dans la réponse sont lues et désérialisées dans un IEnumerable de Singer, qui est renvoyé par la méthode.

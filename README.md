@@ -138,11 +138,11 @@ return CreatedAtAction(nameof(GetOne), new { id = Singer.Id }, Singer);
 L'API Web peut prendre en charge d'autres formats, mais dans la grande majorité des cas JSON sera utilisé comme format de sérialisation par défaut.
 
 #### Web API
- ![This is an image](https://github.com/issammenjli/Vibe/blob/master/Vibe.UI/wwwroot/images/Solution.png)
+ ![This is an image](https://github.com/issammenjli/Vibe/blob/master/Vibe.UI/wwwroot/images/Solution.PNG)
 Rappelez-vous que nous avons trois projets dans la solution, une application frontale Vibe.UI (Razor pages), Vibe.WebApi (le projet Web API) et Vibe.Entities (une bibliothèque de classes qui partage la classe de Singer entre les différentes couches).
  
 Expliquons, note API Web.
- ![This is an image](https://github.com/issammenjli/Vibe/blob/master/Vibe.UI/wwwroot/images/Capture API.PNG)
+ ![This is an image](https://github.com/issammenjli/Vibe/blob/master/Vibe.UI/wwwroot/images/Capture%20API.PNG)
 Dans Program.cs, nous ajoutons la prise en charge du Controller au conteneur d'injection de dépendances builder.Services.AddControllers(). 
 Vers la fin, on mappe les Controllers, app.MapControllers(), mais cette fois sans table de routage.
 Alors, comment l'API Web sait-elle comment mapper les URL aux actions du Controller ?  
@@ -154,7 +154,7 @@ Les requêtes effectuées par des applications qui s'exécutent dans le navigate
 
 Voici le cœur de l'API, le Controller.
 
- ![This is an image](https://github.com/issammenjli/Vibe/blob/master/Vibe.UI/wwwroot/images/Controller.png)
+ ![This is an image](https://github.com/issammenjli/Vibe/blob/master/Vibe.UI/wwwroot/images/Controller.PNG)
 C'est une classe qui dérive de ControllerBase. C’est essentiellement un Controller sans prise en charge de la vue. Il est décoré par l'attribut ApiController. Cet attribut active les fonctionnalités de l'API sur le Controller. L'une des choses qu'il fait est d'exiger un routage d'attribut au lieu d'une table de routage.
 Nous spécifions maintenant la route de base pour le Controller comme ceci [Route("[controller]")]. 
 Controller ici est une expression qui évaluera le nom du Controller sans le suffixe donc, dans ce cas, Singer.

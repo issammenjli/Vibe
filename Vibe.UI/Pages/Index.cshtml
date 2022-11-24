@@ -1,0 +1,25 @@
+﻿@page
+@model IndexModel
+
+<div class="row">
+    <h4 class="mb-3 ml-5">(^.^) LeT's ViBiNg (^.^)</h4>
+</div>
+
+@foreach (var singer in Model.Singers)
+{
+    <div class="row mb-4">
+        <div class="col-2 text-center">
+            <img height="80"
+             src="Images/@singer.Photo" alt="Singer image" />
+        </div>
+        <div class="col-2 my-auto">@singer.Name</div>
+        <div class="col-2 my-auto">$@singer.Nickname</div>
+        <div class="col-2 my-auto">Born in: @DateOnly.FromDateTime(singer.BirthDate) </div>
+    </div>
+}
+
+<div class="row">
+    <div class="ml-5 mt-3">
+        <a asp-page="Create">New Star</a>
+    </div>
+</div>

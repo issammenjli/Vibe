@@ -1,0 +1,25 @@
+﻿@page
+@model Vibe.UI.Pages.CreateModel
+<h4>Add a Singer</h4>
+
+<form method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="row mb-2 form-group">
+        <div class="col-3">
+            <label asp-for="NewSinger.Name"></label>
+        </div>
+        <div class="col-9">
+            <input class="form-control" type="text" asp-for="NewSinger.Name" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            <label asp-for="NewSinger.Nickname"></label>
+        </div>
+        <div class="col-9">
+            <input class="form-control" type="text" asp-for="NewSinger.Nickname" />
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Add</button>
+</form>

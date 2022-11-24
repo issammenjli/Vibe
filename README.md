@@ -1,13 +1,13 @@
-ASP.Net Core 6 
-Les fondamentaux
+# <p align="center"> ASP.Net Core 6 Les fondamentaux </p>
 
 
 Le présent article est un cas pratique d’un mini-projet développé en ASP. Net Core 6. Le but est de survoler les grandes lignes du .Net Core afin de faciliter l’assimilation des différents socles techniques. Pour cela nous allons implémenter une application Vibe permettant de lister les chanteurs les plus célèbres😉. Par la suite nous allons enrichir la solution tout en décortiquant les points les plus important. 
 Premièrement, le code source est disponible sur Git.
 Le projet sera composé de trois couches front (UI), back (WebAPI) et Entities pour la couche transverse.
 
-1/Front
-Démarrage et hébergement d'une application
+### 1/Front
+
+#### Démarrage et hébergement d'une application
 Le .Net Core nous permet de créer des applications front rendues par le serveur ou par le browser. 
 Ainsi on distingue deux modèles rendus par le serveur
 •	Modèle basé sur des pages Razor 
@@ -43,7 +43,7 @@ Nous abordons maintenant un point très axial dans la conception et le développ
 
 
 
-Injection de dépendance
+#### Injection de dépendance
 ![This is an image](https://github.com/issammenjli/Vibe/blob/master/Vibe.UI/wwwroot/images/program.cs.PNG)
 Revenons au fichier Program.cs. La partie juste avant la ligne qui crée l'objet app enregistre les services dans le conteneur d'injection de dépendance. 
 // Add services to the container.
@@ -54,7 +54,7 @@ Maintenant comment ça fonctionne :
 Builder.Services est l'objet sur lequel s’effectue l'enregistrement avant le lancement de l’application. AddRazorPages est méthode d'extension qui enregistre tous les types nécessaires pour le moteur Razor Pages. 
 Vous pouvez également enregistrer vos propres types dans un conteneur d'injection de dépendances. 
 
-Middleware et pipeline de requêtes
+#### Middleware et pipeline de requêtes
 Là aussi on parle d’une notion très importante. Dans le fichier Program.cs, entre la création de l’objet app et son exécution, il y a une succession d’appels de méthode sur l'objet app, préfixe généralement par le mot Use. 
 C’est là où nous configurons le pipeline de requêtes internes et c'est la partie où nous spécifions les fonctionnalités ASP.NET Core voulues. Une fois qu'une demande atteint notre application via Kestrel, elle est traitée par un certain nombre d'étapes qui constituent le pipeline de la demande. 
 Ces étapes sont appelées middleware. Tous les Middlewares dans l'ordre auront la possibilité d’interagir avec la requête, formant la réponse. Si vous ne configurez aucun middleware dans votre application, cette dernière ne fera tout simplement rien lorsqu'elle recevra une requête. 
@@ -64,7 +64,7 @@ L'ordre dans lequel le middleware est branché est important puisque les donnée
 Il y a autre chose à dire sur le middleware c’est le StaticFiles. Seuls les fichiers présents dans le dossier wwwroot sont accessibles par ce middleware, donc tous les fichiers statiques doivent s'y trouver. 
 Vous pouvez trouver d’autres exemples de construction de Middlewares, et il est également possible de créer le vôtre. 
 
-Pages Razor : pages, routage et helpers
+#### Pages Razor : pages, routage et helpers
 Comment écrire la partie interface utilisateur d'une application ASP.NET Core ?
 Avant de répondre je devrais introduire certaines notions.
 Le mécanisme de routage d'ASP.NET Core prend l'URL reçu et la mappe à une Razor Page.
@@ -82,12 +82,13 @@ La méthode OnGet() est appelée un handler method. Elle sera exécutée lorsque
 Retour à la page Index, l’autre chose intéressante dans le Razor est la balise spéciale asp‑page, ce n'est pas un attribut HTML standard mais un exemple de helper. Cet attribut est traité par ASP.NET Core lorsqu'il restitue la page. 
 Asp‑page prend le nom d'une page et le transforme en une URL, qui est ensuite rendue dans l’attribut href. Cela générera donc un lien vers la page Create.
 
-Pages Razor : publication de données, validation et liaison de données
+#### Pages Razor : publication de données, validation et liaison de données
 Jetons un œil sur la page Create.
  ![This is an image](https://github.com/issammenjli/Vibe/blob/master/Vibe.UI/wwwroot/images/Create.PNG)
 Elle contient un formulaire HTML qui n'y a rien de spécial à l'exception du fait que des helpres sont utilisés :
 Asp‑validation‑summary affiche une liste de toutes les erreurs de validation dès qu'elles sont présentes.
  Asp‑for, présent à la fois dans le lable et l’input, référence une propriété dans le modèle NewSinger.
+ 
  ![This is an image](https://github.com/issammenjli/Vibe/blob/master/Vibe.UI/wwwroot/images/CreateModel.PNG)
 Voici le CreateModel avec la propriété NewSinger. Il est décoré avec un attribut BindProperty. Cela signifie que dès que le formulaire est posté, cet objet sera automatiquement rempli avec les valeurs postées. C'est ce qu'on appelle la liaison de données binding.
 Alors comment cela fonctionne :
@@ -109,9 +110,10 @@ Cet objet s'assurera que la page actuelle, dans ce cas, la page Create, est réa
 Lorsqu'il n'y a pas d'erreurs de validation, après l'ajout du Singer au repository, un objet RedirectToPage est renvoyé et qui implémente également IActionResult. 
 Cela redirigera vers la page spécifiée, dans ce cas, l'index, qui affichera à nouveau la liste des Singers.
 
-2/ Backend
+### 2/ Backend
 De même que la partie front, on dispose de pas mal d’options pour implémenter la partie back : WebAPI, gRPC et même le SignalR peut être considéré comme une API qui prend en charge la communication serveur -> client.
- Applications API
+
+#### Applications API
 Une API est une interface logicielle qui permet d’interagir avec nos services afin déchanger des données. Donc une API doit pouvoir envoyer et recevoir des données. Nous utilisons la sérialisation pour cela en transformant des objets C# dans un format, comme le JSON, qui peut être envoyé à travers le réseau.
 L'extrémité réceptrice peut alors restituer les données sérialisées, à nouveau, sous forme d'objets en utilisant la désérialisation.
 
@@ -122,8 +124,7 @@ Le navigateur interagira avec le serveur pour obtenir les pages, comme nous l'av
 Lorsque des données sont nécessaires, l'application serveur contactera l'API pour obtenir les données.
 Lorsque de nouvelles données sont introduites ou modifiées, elle contacte à nouveau l'API pour les faire persister.
  
-
-REST
+#### REST
 L'API Web dans ASP.NET Core nous permet d'écrire des API basées sur REST, également appelées API RESTful.
 Généralement, dans une API REST, le protocole HTTP est exploité. Nous utilisons des requêtes et des réponses HTTP, et chaque élément de données est disponible sur un point de terminaison unique appelé End point.
 Une liste de chanteurs, par exemple, pourrait être disponible sur /Singers et un chanteur avec un ID de 1 sur /Singer/1.
@@ -135,7 +136,8 @@ Lorsqu'une réponse revient, nous pouvons examiner le code d'état de la requêt
 Les réponses peuvent également contenir des pointeurs sous la forme d'URL avec des suggestions sur ce qu'il faut faire ensuite. Lorsqu'un nouveau Singer est introduit avec un POST, la réponse peut contenir l'URL sur laquelle trouver le nouveau Singer. 
 return CreatedAtAction(nameof(GetOne), new { id = Singer.Id }, Singer);
 L'API Web peut prendre en charge d'autres formats, mais dans la grande majorité des cas JSON sera utilisé comme format de sérialisation par défaut.
-Web API
+
+#### Web API
  ![This is an image](https://github.com/issammenjli/Vibe/blob/master/Vibe.UI/wwwroot/images/Solution.png)
 Rappelez-vous que nous avons trois projets dans la solution, une application frontale Vibe.UI (Razor pages), Vibe.WebApi (le projet Web API) et Vibe.Entities (une bibliothèque de classes qui partage la classe de Singer entre les différentes couches).
  
@@ -151,6 +153,7 @@ Revenant au Program.cs, la prise en charge de CORS est également ajoutée. app.
 Les requêtes effectuées par des applications qui s'exécutent dans le navigateur en dehors du domaine utilisé par l'application frontale ne sont pas possibles, sauf avec une autorisation explicite. Avec CORS, je peux autoriser explicitement notre application Razor page.
 
 Voici le cœur de l'API, le Controller.
+
  ![This is an image](https://github.com/issammenjli/Vibe/blob/master/Vibe.UI/wwwroot/images/Controller.png)
 C'est une classe qui dérive de ControllerBase. C’est essentiellement un Controller sans prise en charge de la vue. Il est décoré par l'attribut ApiController. Cet attribut active les fonctionnalités de l'API sur le Controller. L'une des choses qu'il fait est d'exiger un routage d'attribut au lieu d'une table de routage.
 Nous spécifions maintenant la route de base pour le Controller comme ceci [Route("[controller]")]. 
@@ -159,29 +162,39 @@ Controller ici est une expression qui évaluera le nom du Controller sans le suf
  ![This is an image](https://github.com/issammenjli/Vibe/blob/master/Vibe.UI/wwwroot/images/GetAllController.PNG)
 Le Controller a une action appelée GetAll, qui renvoie un ActionResult. Cette fois, nous utilisons ActionResults qui transmet un code d'état HTTP en réponse afin que les appelants puissent voir le résultat de leur demande. Lorsqu'il n'y a pas de Singers, nous renvoyons NoContent. C'est le code d'état HTTP 204, par exemple. Et lorsque tout a été réussi, nous retournons le code de statut Ok 200 avec la liste des Singers. Quant à la sérialisation de l'objet Singer, elle se fait automatique.
 L'action GetAll est configurée pour répondre à une requête GET. Cela signifie que lorsqu'une requête GET est envoyée à /Singer, cette action s'exécutera.
+
  ![This is an image](https://github.com/issammenjli/Vibe/blob/master/Vibe.UI/wwwroot/images/GetOneController.PNG)
 GetOne répond également à une requête GET, mais il dispose d'informations de routage supplémentaires. Il est configuré pour attendre un ID dans l'URL qui doit être un nombre entier. S'il y a une correspondance avec cette route, l'action se déclenchera, et le paramètre id obtiendra automatiquement sa valeur à partir de l'URL. Nous obtenons le Singer à partir de la repository à l'aide de l'ID. S'il n'y a pas de Singer de ce type, nous renvoyons le code d'état HTTP 404 NotFound. S'il y en a, nous retournons à nouveau Ok avec le Singer.
+
   ![This is an image](https://github.com/issammenjli/Vibe/blob/master/Vibe.UI/wwwroot/images/PostController.PNG)
+  
 Il y a une autre action qui prend un Singer comme paramètre et réagit à un POST. Encore une fois, la liaison de données, prendre les données de la requête et les désérialiser dans un Singer, est automatique. Nous pouvons également effectuer une validation à l'aide de ModelState, renvoyant un code d'état HTTP 400, BadRequest, lorsque le Singer ne passe pas la validation.
 Mais parce que nous avons décoré le Controller avec l’attribut ApiController, ce code n'est plus nécessaire car la validation se fait automatiquement par l'API Web.
 Ainsi, la seule chose que nous avons à faire est d'ajouter le Singer au repository et de renvoyer un code de statut 201 Créé.
 Avec le résultat de l'action CreatedAtAction, nous pouvons inclure l'URL du Singer nouvellement créé dans la réponse.
 Bon, maintenant que nous avons une API entièrement fonctionnelle, il est temps de la consommer à partir du Vibe.UI.
 
-Consommer une API Web
+#### Consommer une API Web
 Dans le Program.cs de l'application Vibe.UI (Razor page), un HttpClient est ajouté au conteneur d'injection de dépendance. 
 HttpClient est la classe à utiliser pour faire des requêtes HTTP. Il est configuré pour envoyer les requêtes à l'API.
 A ce stade j’introduis dans Vibe.UI une classe SingerApiService qui se chargera de faire les réelles demandes.
+
  ![This is an image](https://github.com/issammenjli/Vibe/blob/master/Vibe.UI/wwwroot/images/Service.PNG)
+ 
 Ce service obtient le HttpClient injecté. 
+
  ![This is an image](https://github.com/issammenjli/Vibe/blob/master/Vibe.UI/wwwroot/images/GetAllController.PNG)
+ 
 Dans GetAll, on l'utilise pour faire une requête GET à l'URL du Singer.
 La ligne suivante garantit un code d'état HTTP dans la plage 200, ce qui indique le succès. Si un autre code d'état est renvoyé, une exception est levée ici. Après ça, les données contenues dans la réponse sont lues et désérialisées dans un IEnumerable de Singer, qui est renvoyé par la méthode.
 
  ![This is an image](https://github.com/issammenjli/Vibe/blob/master/Vibe.UI/wwwroot/images/AddSinger.PNG)
+ 
 La méthode Add obtient un Singer en tant que paramètre qui est encapsulé dans un objet jsonContent. Cet objet peut ensuite être utilisé pour faire une requête POST à l'URL du Singer.
 Souvent, des éléments tels que l'ID du Singer sont ajoutés par l'API. Il est important que l'appelant obtienne cette information. C'est pourquoi la réponse contiendra le Singer tel qu'il a été ajouté à la Repository, que nous pouvons désérialiser et renvoyer.
 
 It’s done ^^
-Conclusion : Cette article est une bonne opportunité pour se familiariser avec les grandes lignes du ASP.net Core 6 et le Web API. Maintenant je vous invite à voir en détail chaque point pour explorer la richesse du Framework. N’hésitez pas à me faire part de vos commentaires où de vos questions😉.
+
+#### Conclusion :
+Cette article est une bonne opportunité pour se familiariser avec les grandes lignes du ASP.net Core 6 et le Web API. Maintenant je vous invite à voir en détail chaque point pour explorer la richesse du Framework. N’hésitez pas à me faire part de vos commentaires où de vos questions😉.
  
